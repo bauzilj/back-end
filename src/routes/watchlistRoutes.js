@@ -1,10 +1,18 @@
 import express from "express";
-import { addToWatchlist } from "../controllers/watchlistControllers.js";
+import { addToWatchlist, removeFromWatchlist, updateWatchlistItem } from "../controllers/watchlistControllers.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import { validateRequest } from "../middleware/validateRequest.js";
+import { addToWatchlistSchema } from "../validators/watchlistValidators.js";
 
 const router = express.Router();
 
-router.post("/", addToWatchlist);
+router.use(authMiddleware);
 
+router.post("/", validateRequest(addToWatchlistSchema), addToWatchlist);
+
+
+router.put("/:id", updateWatchlistItem);
+router.delete("/:id", removeFromWatchlist);
 
 //outer.post("/login", login);
 
@@ -13,4 +21,4 @@ router.post("/", addToWatchlist);
 
 
 
-export default router; 
+export default router;
